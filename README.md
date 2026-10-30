@@ -19,3 +19,10 @@ Two deliberate decisions, because trying to honour both readings of each would b
 - Q-values are **stripped**, not interpreted. They carry no meaning for `Allow`; parsing them would imply we sort by them, which we do not.
 
 The awkward edge: if a server lists only non-standard methods, the result is an empty `Set`. Distinguish that from an empty or missing header — both also yield an empty `Set` — by checking the input string first if the distinction matters to you.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
